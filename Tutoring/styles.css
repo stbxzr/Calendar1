@@ -1,0 +1,18 @@
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: navy;
+ 
+}
+
+#root-div {
+  color: black;
+  font-weight: 500;
+  border: 3px solid blue;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  background-color: lightblue;
+  height: auto;
+  width: 650px;
+}
