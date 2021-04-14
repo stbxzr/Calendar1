@@ -9,25 +9,31 @@
   </head>
 
   <body>
+
+    <script
+      type="text/javascript"
+      src="http://code.jquery.com/jquery-1.7.1.min.js"
+    ></script>
+
     <div class="container">
       <div class="jumbotron">
         <h1>Make a reservation</h1>
         <h3>The greatest resource in the galaxy for Star Wars statistics!</h3>
         <hr />
-        <a href="/">
+        <a href="/tables">
           <button class="btn btn-danger btn-lg">
-            <span class="fa fa-eye"></span> View Characters
+            <span class="fa fa-eye"></span> View Tables
           </button>
         </a>
       </div>
       <div class="row">
-        <div class="col-12">
+        <div class="col-12 cbox">
           <div class="card">
             <div class="card-header">
               <h3><strong>Add Reservation</strong></h3>
             </div>
             <div class="card-body">
-              <form method="POST" role="form">
+              <form method="POST" name = "form" role="form">
                 <div class="form-group">
                   <label for="name">Name</label>
                   <input type="text" class="form-control" id="name" />
@@ -68,11 +74,9 @@
       
       const addBtn = document.getElementById('add-btn');
       
-      // Question: What is "e" short for?
       addBtn.addEventListener('click', (e) => {
         e.preventDefault();
         
-        // Question: What does this code do?
         let guestName = document.getElementById('name').value.trim();
         let guestEmail = document.getElementById('email').value.trim();
         let guestPhone = document.getElementById('phonenumber').value.trim();
@@ -80,23 +84,34 @@
         
         let newReso = {
           name: guestName,
-          email: guestEmail,
           phonenumber: parseInt(guestPhone),
-          uniqueid: parseInt(guestID),
+          email: guestEmail,
+          uniqueid: guestID,
+
         };
 
-        // Question: What does this code do??
-        fetch('/api/characters', {
+        let formReset = document.getElementsByName("form");
+        form.reset();
+
+        fetch('/api/tablerequest', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(newCharacter),
+          body: JSON.stringify(newReso),
         })
           .then((response) => response.json())
           .then((data) => {
             console.log('reserve.html', data);
-            alert(`Reservation confirmed: ${data.name}`);
+
+            let successEl = $(`<div class="container row no-gutters al justify-content-center mb-3"> <div class="row alert alert-success m-auto col-5 rounded-pill" role="alert">
+            <p class="m-auto p-auto">Reservation added for: ${data.name}!</p><i class="fa fa-check m-auto"></i></div>
+            </div>`)
+            $(".cbox").prepend(successEl);
+            setTimeout(function(){
+              $(`.al`).remove();
+            }, 2500);
+
           })
           .catch((error) => {
             console.error('Error:', error);
